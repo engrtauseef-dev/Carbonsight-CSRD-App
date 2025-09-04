@@ -4,3 +4,4 @@ numpy
 openai
 jinja2
 reportlab
+fpdf
