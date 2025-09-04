@@ -1,0 +1,7 @@
+streamlit
+pandas
+numpy
+openai
+jinja2
+reportlab
+fpdf2
