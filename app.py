@@ -255,3 +255,26 @@ if st.button("✨ Generate Audit-Ready CSRD Report", type="primary"):
         except Exception as e:
             st.error(f"Error generating report: {str(e)}")
             st.info("Ensure your OpenAI API key is set correctly in .streamlit/secrets.toml")
+
+st.divider()
+with st.expander("🚀 Interested in a Full Pilot?"):
+    st.write("**Get a comprehensive analysis for your entire facility.**")
+    col1, col2 = st.columns(2)
+    with col1:
+        pilot_name = st.text_input("Your Name")
+        pilot_company = st.text_input("Company Name")
+    with col2:
+        pilot_email = st.text_input("Work Email")
+        pilot_phone = st.text_input("Phone")
+    if st.button("Request Full Pilot"):
+        # Here you would connect to a CRM or send an email
+        st.success("Thanks! We'll contact you within 24 hours to discuss your pilot project.")
+
+# After the efficiency results
+cost_per_kwh = st.number_input("Your Electricity Cost (€/kWh)", value=0.15)
+annual_hours = st.number_input("Annual Operating Hours", value=8000)
+annual_waste_cost = (actual_power_kw - theoretical_power_kw) * annual_hours * cost_per_kwh
+if annual_waste_cost > 0:
+    st.info(f"**Estimated Annual Waste:** €{annual_waste_cost:,.0f}")
+
+
