@@ -298,12 +298,12 @@ class CSRDPDF(FPDF):
 
 # Inside your report generation button block, replace the PDF section with this:
 
-            # -------------------------------
-            # Generate Polished PDF Report
-            # -------------------------------
-            pdf = CSRDPDF()
-            pdf.alias_nb_pages()  # For page numbering in footer
-            pdf.add_page()
+# -------------------------------
+# Generate Polished PDF Report
+# -------------------------------
+pdf = CSRDPDF()
+pdf.alias_nb_pages()  # For page numbering in footer
+pdf.add_page()
 
             # Title Page
             pdf.set_font('Arial', 'B', 20)
