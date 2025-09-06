@@ -23,7 +23,7 @@ def calculate_compressed_air_power(flow_rate_cfm, inlet_pressure_psia, discharge
 # ***************************************************
 # 2. STREAMLIT APP UI
 # ***************************************************
-st.title("♻️ CarbonSight AI: Physics-Based Waste Detection")
+st.title("♻️ CarbonSight AI: Physics-Based Waste Detection + Audit Ready CSRD Report")
 st.header("Compressed Air System Analysis")
 
 col1, col2 = st.columns(2)
