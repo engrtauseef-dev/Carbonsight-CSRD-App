@@ -315,10 +315,10 @@ with st.expander("🚀 Interested in a Full Pilot?"):
     with st.form("pilot_request_form"):
         col1, col2 = st.columns(2)
         with col1:
-            pilot_name = st.text_input("Your Name*", required=True)
-            pilot_company = st.text_input("Company Name*", required=True)
+            pilot_name = st.text_input("Your Name*")
+            pilot_company = st.text_input("Company Name*")
         with col2:
-            pilot_email = st.text_input("Work Email*", required=True)
+            pilot_email = st.text_input("Work Email*")
             pilot_phone = st.text_input("Phone")
         
         submitted = st.form_submit_button("Request Full Pilot")
