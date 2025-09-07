@@ -302,20 +302,69 @@ def generate_csrd_pdf(report_data, filename="CSRD_Report.pdf"):
     pdf.output(filename)
     return filename
 
+# Add this to your imports at the top
+import smtplib
+from email.mime.text import MIMEText
+
+# ... [your existing code] ...
+
 st.divider()
 with st.expander("🚀 Interested in a Full Pilot?"):
-    st.write("**Get a comprehensive analysis for your entire facility.**")
-    col1, col2 = st.columns(2)
-    with col1:
-        pilot_name = st.text_input("Your Name")
-        pilot_company = st.text_input("Company Name")
-    with col2:
-        pilot_email = st.text_input("Work Email")
-        pilot_phone = st.text_input("Phone")
-    if st.button("Request Full Pilot"):
-        # Here you would connect to a CRM or send an email
-        st.success("Thanks! We'll contact you within 24 hours to discuss your pilot project.")
-
+    st.write("**Get a comprehensive CSRD analysis for your entire facility.**")
+    
+    with st.form("pilot_request_form"):
+        col1, col2 = st.columns(2)
+        with col1:
+            pilot_name = st.text_input("Your Name*", required=True)
+            pilot_company = st.text_input("Company Name*", required=True)
+        with col2:
+            pilot_email = st.text_input("Work Email*", required=True)
+            pilot_phone = st.text_input("Phone")
+        
+        submitted = st.form_submit_button("Request Full Pilot")
+        
+        if submitted:
+            # Prepare email content
+            subject = f"New Pilot Request: {pilot_company}"
+            body = f"""
+            New Pilot Request from CarbonSight AI:
+            
+            Name: {pilot_name}
+            Company: {pilot_company}
+            Email: {pilot_email}
+            Phone: {pilot_phone}
+            
+            System Analysis Details:
+            - Flow Rate: {flow_rate_cfm} CFM
+            - Efficiency Gap: {efficiency_gap_percent:.0f}%
+            - Potential Savings: Significant
+            
+            This lead was generated through the automated CSRD tool.
+            """
+            
+            try:
+                # Configure your email (using Gmail example)
+                sender_email = "your_email@gmail.com"  # Your email
+                receiver_email = "your_email@gmail.com"  # Where you want leads
+                password = st.secrets["EMAIL_PASSWORD"]  # Add to secrets.toml
+                
+                msg = MIMEText(body)
+                msg['Subject'] = subject
+                msg['From'] = sender_email
+                msg['To'] = receiver_email
+                
+                # Send email
+                with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+                    server.login(sender_email, password)
+                    server.sendmail(sender_email, receiver_email, msg.as_string())
+                
+                st.success("✅ Request received! We'll contact you within 24 hours.")
+                
+                # Also show in the app for immediate viewing
+                st.info(f"**New Lead:** {pilot_name} from {pilot_company} | Email: {pilot_email}")
+                
+            except Exception as e:
+                st.error("Sorry, there was an error sending your request. Please email us directly at tauseef@sustainabilityventuresltd.com.")
 # After the efficiency results
 cost_per_kwh = st.number_input("Your Electricity Cost (€/kWh)", value=0.15)
 annual_hours = st.number_input("Annual Operating Hours", value=8000)
