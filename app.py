@@ -309,8 +309,8 @@ from email.mime.text import MIMEText
 # ... [your existing code] ...
 
 st.divider()
-with st.expander("🚀 Interested in a Full Pilot?"):
-    st.write("**Get a comprehensive CSRD analysis for your entire facility.**")
+with st.expander("🚀 Interested in a Full Pilot Project?"):
+    st.write("**Get a comprehensive CSRD and energy analysis for your entire facility.**")
     
     with st.form("pilot_request_form"):
         col1, col2 = st.columns(2)
@@ -319,52 +319,109 @@ with st.expander("🚀 Interested in a Full Pilot?"):
             pilot_company = st.text_input("Company Name*")
         with col2:
             pilot_email = st.text_input("Work Email*")
-            pilot_phone = st.text_input("Phone")
+            pilot_phone = st.text_input("Phone Number")
         
-        submitted = st.form_submit_button("Request Full Pilot")
+        comments = st.text_area("What are your biggest sustainability challenges?*", 
+                               placeholder="CSRD compliance, energy costs, reporting, etc.")
+        
+        submitted = st.form_submit_button("✅ Request Full Pilot Proposal")
         
         if submitted:
-            # Prepare email content
-            subject = f"New Pilot Request: {pilot_company}"
-            body = f"""
-            New Pilot Request from CarbonSight AI:
-            
-            Name: {pilot_name}
-            Company: {pilot_company}
-            Email: {pilot_email}
-            Phone: {pilot_phone}
-            
-            System Analysis Details:
-            - Flow Rate: {flow_rate_cfm} CFM
-            - Efficiency Gap: {efficiency_gap_percent:.0f}%
-            - Potential Savings: Significant
-            
-            This lead was generated through the automated CSRD tool.
-            """
-            
-            try:
-                # Configure your email (using Gmail example)
-                sender_email = "Your_Email@gmail.com"  # Your email
-                receiver_email = "engrtauseef@gmail.com"  # Where you want leads
-                password = st.secrets["EMAIL_PASSWORD"]  # Add to secrets.toml
+            # Validate required fields
+            if not pilot_name or not pilot_company or not pilot_email or not comments:
+                st.error("⚠️ Please fill in all required fields (marked with *)")
+            else:
+                # Prepare professional email content
+                subject = f"CarbonSight Pilot Request: {pilot_company}"
                 
-                msg = MIMEText(body)
-                msg['Subject'] = subject
-                msg['From'] = sender_email
-                msg['To'] = receiver_email
+                html_body = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+                    <h2 style="color: #2E86AB;">New Pilot Project Request</h2>
+                    
+                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
+                        <h3 style="color: #333;">Contact Information</h3>
+                        <p><strong>Name:</strong> {pilot_name}</p>
+                        <p><strong>Company:</strong> {pilot_company}</p>
+                        <p><strong>Email:</strong> {pilot_email}</p>
+                        <p><strong>Phone:</strong> {pilot_phone or 'Not provided'}</p>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h3 style="color: #333;">Their Challenges</h3>
+                        <p style="background-color: #fff3cd; padding: 10px; border-radius: 5px;">{comments}</p>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h3 style="color: #333;">Analysis Context</h3>
+                        <p><strong>System Analyzed:</strong> Compressed Air ({flow_rate_cfm} CFM)</p>
+                        <p><strong>Efficiency Gap:</strong> {efficiency_gap_percent:.0f}% above optimal</p>
+                        <p><strong>Potential Savings:</strong> Significant energy and cost reduction identified</p>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background-color: #e2e3e5; border-radius: 5px;">
+                        <p><strong>Next Steps:</strong> This lead was generated through the CarbonSight AI tool. 
+                        They've already seen value and are requesting a full pilot.</p>
+                    </div>
+                    
+                    <hr style="margin: 30px 0;">
+                    <p style="color: #666; font-size: 12px;">
+                        Sent automatically from CarbonSight AI Platform | Sustainability Ventures Ltd
+                    </p>
+                </body>
+                </html>
+                """
                 
-                # Send email
-                with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-                    server.login(sender_email, password)
-                    server.sendmail(sender_email, receiver_email, msg.as_string())
-                
-                st.success("✅ Request received! We'll contact you within 24 hours.")
-                
-                # Also show in the app for immediate viewing
-                st.info(f"**New Lead:** {pilot_name} from {pilot_company} | Email: {pilot_email}")
-                
-            except Exception as e:
-                st.error("Sorry, there was an error sending your request. Please email us directly at tauseef@sustainabilityventuresltd.com.")
+                try:
+                    # Email configuration for your company email
+                    sender_email = "tauseef@sustainabilityventuresltd.com"
+                    receiver_email = "tauseef@sustainabilityventuresltd.com"  # Sends to yourself
+                    password = st.secrets["GMAIL_APP_PASSWORD"]  # Your Gmail App Password
+                    
+                    # Create message
+                    msg = MIMEMultipart()
+                    msg['Subject'] = subject
+                    msg['From'] = f"CarbonSight AI <{sender_email}>"
+                    msg['To'] = receiver_email
+                    msg['Reply-To'] = pilot_email  # So you can reply directly to the lead
+                    
+                    # Attach HTML body
+                    msg.attach(MIMEText(html_body, 'html'))
+                    
+                    # Send email using Gmail SMTP (simplest for now)
+                    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+                        server.login(sender_email, password)
+                        server.sendmail(sender_email, receiver_email, msg.as_string())
+                    
+                    # Success message to user
+                    st.success("""
+                    ✅ Thank you! Your request has been received.
+                    
+                    **What happens next:**
+                    1. Our team will review your challenges
+                    2. We'll contact you within 24 hours to discuss your specific needs
+                    3. We'll prepare a customized pilot proposal
+                    """)
+                    
+                    # Also show confirmation in the app
+                    st.info(f"""
+                    **Lead Captured:** 
+                    - **Company:** {pilot_company}
+                    - **Contact:** {pilot_name} ({pilot_email})
+                    - **Priority:** High (Pilot Request)
+                    """)
+                    
+                except Exception as e:
+                    st.error(f"""
+                    ❌ Sorry, there was an error sending your request. 
+                    
+                    Please email us directly at **tauseef@sustainabilityventuresltd.com** with:
+                    - Your name and company
+                    - The challenges you're facing
+                    - Reference: Compressed Air Analysis
+                    """)
+                    # Display the error for debugging (remove in production)
+                    st.write(f"Technical details: {str(e)}")
 # After the efficiency results
 cost_per_kwh = st.number_input("Your Electricity Cost (€/kWh)", value=0.15)
 annual_hours = st.number_input("Annual Operating Hours", value=8000)
