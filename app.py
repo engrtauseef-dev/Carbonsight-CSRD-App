@@ -344,8 +344,8 @@ with st.expander("🚀 Interested in a Full Pilot?"):
             
             try:
                 # Configure your email (using Gmail example)
-                sender_email = "your_email@gmail.com"  # Your email
-                receiver_email = "your_email@gmail.com"  # Where you want leads
+                sender_email = "Your_Email@gmail.com"  # Your email
+                receiver_email = "engrtauseef@gmail.com"  # Where you want leads
                 password = st.secrets["EMAIL_PASSWORD"]  # Add to secrets.toml
                 
                 msg = MIMEText(body)
