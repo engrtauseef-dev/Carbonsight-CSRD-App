@@ -110,7 +110,7 @@ if st.button("✨ Generate Audit-Ready CSRD Report", type="primary"):
 
     expert_prompt = f"""
     ACT as a senior sustainability consultant (CEM, CAP, GRI certified). Write a **machine-readable JSON CSRD report** for an industrial compressed air system. Include fields: 
-    executive_summary, esrs_s1_analysis, esrs_2_analysis, materiality_assessment, actionable_recommendations, estimated_impact, technical_analysis, ai_waste_diagnosis.
+    executive summary, esrs_s1_analysis, esrs_2_analysis, materiality_assessment, actionable_recommendations, estimated_impact, technical_analysis, ai_waste_diagnosis.
 
     TECHNICAL ANALYSIS:
     - Flow Rate: {flow_rate_cfm} CFM
